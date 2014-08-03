@@ -1,0 +1,31 @@
+from django import forms
+
+import sys
+from os.path import expanduser
+
+bulbLabels = []
+'''
+if not expanduser('~/gnious-lifx-python/') in sys.path:
+    sys.path.append(expanduser('~/gnious-lifx-python/'))
+'''
+import lifx
+'''
+import imp
+imp.load_source('schedule_cycle',expanduser('~/gnious-lifx-python/schedule-cycle.py'))
+'''
+from lifx.schedule_cycle import ScheduleCycle
+class ScheduleCycleForm(forms.Form):
+    for light in lifx.get_lights():
+        bulbLabels.append((light.bulb_label,light.bulb_label))
+    bulbs = forms.MultipleChoiceField(choices=bulbLabels)
+    time = forms.FloatField()
+    speed = forms.FloatField()
+    def startCycle(self,bulbs,time,speed):
+        lights = lifx.get_lights()
+        lightsCycle = []
+        for light in lights:
+            for bulb in bulbs:
+                if bulb in light.bulb_label:
+                    lightsCycle.append(light)
+        scheduleCycle = ScheduleCycle()
+        scheduleCycle.driver(lightsCycle,time,speed)
