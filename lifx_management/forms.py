@@ -1,17 +1,17 @@
 from django import forms
 
 import sys
-from os.path import expanduser
+from os.path import pardir, join, abspath, dirname
 
 bulbLabels = []
-
-if not expanduser('~/gnious-lifx-python/') in sys.path:
-    sys.path.append(expanduser('~/gnious-lifx-python/'))
+fullpathToLIFXPython = join(join(pardir,dirname(dirname(dirname(abspath(__file__))))),'lifx-python/')
+if not fullpathToLIFXPython in sys.path:
+    sys.path.append(fullpathToLIFXPython)
 
 import lifx
 
 import imp
-imp.load_source('schedule_cycle',expanduser('~/gnious-lifx-python/schedule-cycle.py'))
+imp.load_source('schedule_cycle','{0}{1}'.format(fullpathToLIFXPython,'schedule-cycle.py'))
 
 from schedule_cycle import ScheduleCycle
 class ScheduleCycleForm(forms.Form):
